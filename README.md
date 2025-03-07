@@ -78,9 +78,6 @@ $ npm run dev
 
 ![Homepage](./readme-images/homepage.png)
 
-### Subscribed Videos
-
-![Subscribed Videos](./readme-images/subscribed.png)
 
 ### Upload a Video
 
