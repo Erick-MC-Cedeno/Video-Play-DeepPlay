@@ -79,7 +79,7 @@ router.post("/uploadVideo", (req, res) => {
     })
 
 });
-
+// get videos 
 router.get("/getVideos", (req, res) => {
     Video.find().populate('writer').exec((err, videos) => {
         if (err) {
