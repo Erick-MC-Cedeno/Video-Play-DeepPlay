@@ -28,7 +28,7 @@ $ cd client
 ```
 
 ```
-$ cd npm install
+$ npm install
 
 ```
 
