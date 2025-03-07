@@ -35,19 +35,22 @@ $ npm install
 # install backend dependencies
 
 ```
-cd Video-Play-DeepPlay
+$ cd Video-Play-DeepPlay
 
 ```
 
 ```
-npm install 
+$ npm install 
 
 ```
 
 
 # start project 
 
-npm run dev
+```
+$ npm run dev
+
+```
 
 
 
