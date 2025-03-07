@@ -7,6 +7,16 @@
 - ![Express.js](https://img.shields.io/badge/Express.js-404D59?style=flat&logo=express) **Express.js**
 - ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white) **MongoDB**
 
+# Setup env node
+
+Windows
+```
+$ set NODE_OPTIONS=--openssl-legacy-provider
+```
+Linux
+```
+$ export NODE_OPTIONS=--openssl-legacy-provider
+```
 
 
 
