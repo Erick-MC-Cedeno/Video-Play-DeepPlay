@@ -38,10 +38,12 @@ $ npm install
 cd Video-Play-DeepPlay
 
 ```
+
+```
 npm install 
 
 ```
-```
+
 
 # start project 
 
