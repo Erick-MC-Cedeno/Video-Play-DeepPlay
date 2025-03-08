@@ -6,6 +6,7 @@ const { User } = require("../models/User");
 const { Video } = require("../models/Video");
 const { Subscriber } = require("../models/Subscriber"); 
 const { auth } = require("../middleware/auth");
+const { VideoView } = require("../models/VideoView");
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -79,7 +80,7 @@ router.post("/uploadVideo", (req, res) => {
     })
 
 });
-// get videos 
+
 router.get("/getVideos", (req, res) => {
     Video.find().populate('writer').exec((err, videos) => {
         if (err) {
@@ -91,12 +92,27 @@ router.get("/getVideos", (req, res) => {
 });
 
 router.post("/getVideo", (req, res) => {
-
-    Video.findOne({ "_id" : req.body.videoId }).populate('writer').exec((err, video) => {
+    Video.findOne({ "_id": req.body.videoId }).populate('writer').exec((err, video) => {
         if(err) return res.status(400).send(err);
-        res.status(200).json({ success: true, video })
-    })
-
+        if(!video) return res.status(404).json({ success: false, message: "Video no encontrado" });
+        
+        // Identificar al espectador: si está autenticado, usar su _id, si no, su IP
+        const viewerId = req.user ? req.user._id.toString() : req.ip;
+        
+        // Verificar si ya existe una vista para este video en las últimas 24 horas
+        VideoView.findOne({ video: video._id, viewer: viewerId }).exec((viewErr, existingView) => {
+            if(viewErr) console.error(viewErr);
+            if(!existingView) {
+                const newView = new VideoView({ video: video._id, viewer: viewerId });
+                newView.save((saveErr) => {
+                    if(saveErr) console.error("Error guardando vista:", saveErr);
+                    // Incrementa el contador de vistas
+                    Video.updateOne({ _id: video._id }, { $inc: { views: 1 }}).exec();
+                });
+            }
+            res.status(200).json({ success: true, video });
+        });
+    });
 });
 
 router.post("/getSubscriptionVideos", (req, res) => {

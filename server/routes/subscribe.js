@@ -36,16 +36,20 @@ router.post("/subscribed", (req, res) => {
 });
 
 router.post("/subscribe", (req, res) => {
-
-    const subscribe = new Subscriber(req.body);
-
-    subscribe.save((err, doc) => {
-        if(err) {
-            return res.json({success: false, err})
+    // Verificar si ya existe la suscripción
+    Subscriber.findOne({ userTo: req.body.userTo, userFrom: req.body.userFrom }).exec((err, existingSub) => {
+        if(err) return res.json({success: false, err});
+        if(existingSub) {
+            return res.status(200).json({success: true, message: "Ya estas suscrito."});
         }
-        return res.status(200).json({success: true});
-    })
-
+        const subscribe = new Subscriber(req.body);
+        subscribe.save((err, doc) => {
+            if(err) {
+                return res.json({success: false, err});
+            }
+            return res.status(200).json({success: true});
+        });
+    });
 });
 
 router.post("/unsubscribe", (req, res) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Button, Form, Input } from 'antd';
+import { Typography, Button, Form, Input, notification } from 'antd';
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -28,6 +28,7 @@ function UploadVideoPage(props) {
     const [categories, setCategories] = useState("Film & Animation");
     const [filePath, setFilePath] = useState("");
     const [thumbnail, setThumbnail] = useState("");
+    const [duration, setDuration] = useState("");
 
     const handleChangeTitle = event => setTitle(event.currentTarget.value);
     const handleChangeDescription = event => setDescription(event.currentTarget.value);
@@ -36,7 +37,7 @@ function UploadVideoPage(props) {
 
     const onSubmit = event => {
         event.preventDefault();
-        if (!title || !description || !categories || !filePath || !thumbnail) {
+        if (!title || !description || !categories || !filePath || !thumbnail || duration === "") {
             return alert("Fill in all fields before submitting!");
         }
 
@@ -47,12 +48,16 @@ function UploadVideoPage(props) {
             privacy,
             filePath,
             category: categories,
-            thumbnail
+            thumbnail,
+            duration: duration['fileDuration']
         };
 
         axios.post('/api/video/uploadVideo', variables).then(response => {
             if (response.data.success) {
-                alert("Video uploaded successfully!");
+                notification.success({
+                    message: <span style={{ color: '#258dfc', fontWeight: 'bold' }}>Video uploaded successfully!</span>,
+                    duration: 2
+                });
                 props.history.push("/");
             } else {
                 alert("Failed to upload video");
@@ -70,6 +75,9 @@ function UploadVideoPage(props) {
                 setFilePath(response.data.filePath);
                 axios.post('/api/video/thumbnail', { filePath: response.data.filePath }).then(response => {
                     if (response.data.success) {
+                        // Convertir fileDuration a string, aplicar trim y eliminar espacios alrededor de los dos puntos.
+                        const fixedDuration = response.data.fileDuration.toString().trim().replace(/\s*:\s*/g, ':');
+                        setDuration({ fileDuration: fixedDuration });
                         setThumbnail(response.data.thumbsFilePath);
                     } else {
                         alert("Failed to create the thumbnail");
@@ -93,8 +101,8 @@ function UploadVideoPage(props) {
                         {({ getRootProps, getInputProps }) => (
                             <div
                                 style={{
-                                    width: '60%',  // MÁS ESTRECHO
-                                    height: '200px',  // Ajustado
+                                    width: '60%',
+                                    height: '200px',
                                     border: '2px solid #258dfc',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -163,7 +171,7 @@ function UploadVideoPage(props) {
                         type="primary" 
                         size="large" 
                         onClick={onSubmit} 
-                        style={{ width: '50%', backgroundColor: '#258dfc', border: 'none' }} // MÁS ESTRECHO
+                        style={{ width: '50%', backgroundColor: '#258dfc', border: 'none' }}
                     >
                         Submit
                     </Button>
