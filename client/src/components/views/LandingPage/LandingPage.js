@@ -85,10 +85,7 @@ function LandingPage() {
                 <span style={{ color: 'white' }}>{video.writer.name}</span>
                 <br />
                 <span style={{ marginLeft: '3rem', color: 'rgb(179,179,179)' }}>
-                    {video.views} views 
-                </span>
-                - <span style={{ color: 'rgb(179,179,179)' }}>
-                    {moment(video.createdAt).format("MMM DD autopilot")}
+                    {video.views} views - {moment(video.createdAt).fromNow()}
                 </span>
             </Col>
         );
