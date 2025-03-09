@@ -6,14 +6,14 @@ const videoViewSchema = mongoose.Schema({
         ref: 'Video',
         required: true
     },
-    viewer: { // Puede ser el ID del usuario o la IP
+    viewer: { 
         type: String,
         required: true
     },
     createdAt: {
         type: Date,
         default: Date.now,
-        expires: 86400 // Expira en 24 horas (86400 segundos)
+        expires: 86400 
     }
 });
 

@@ -75,7 +75,6 @@ function UploadVideoPage(props) {
                 setFilePath(response.data.filePath);
                 axios.post('/api/video/thumbnail', { filePath: response.data.filePath }).then(response => {
                     if (response.data.success) {
-                        // Convertir fileDuration a string, aplicar trim y eliminar espacios alrededor de los dos puntos.
                         const fixedDuration = response.data.fileDuration.toString().trim().replace(/\s*:\s*/g, ':');
                         setDuration({ fileDuration: fixedDuration });
                         setThumbnail(response.data.thumbsFilePath);

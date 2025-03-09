@@ -12,7 +12,7 @@ function DetailedVideoSidePane() {
                 alert('Failed to retrieve videos');
             }
         });
-    }, []); // Empty dependency ensures only one GET call
+    }, []);
 
     const sideVideoPane = sidePane.map((video, index) => {
         let minutes = Math.floor(video.duration / 60);
@@ -53,7 +53,7 @@ function DetailedVideoSidePane() {
     return (
         <div style={{
             marginTop: '3rem',
-            marginRight: '2rem',  // Added margin on the right to separate from the edge
+            marginRight: '2rem',
             padding: '1rem',
             backgroundColor: '#282828',
             borderRadius: '8px',

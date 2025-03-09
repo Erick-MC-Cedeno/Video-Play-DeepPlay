@@ -39,7 +39,7 @@ function DetailedVideoPage(props) {
         }
     };
 
-    // Handlers for search functionality
+    
     const handleSearch = () => {
         props.history.push(`/?search=${encodeURIComponent(searchTerm)}`);
         window.location.reload();
@@ -50,7 +50,6 @@ function DetailedVideoPage(props) {
     if (video.writer) {
         return (
             <div style={{ backgroundColor: '#181818', minHeight: '100vh', color: 'white' }}>
-                {/* Header inspired by YouTube */}
                 <div style={{
                     backgroundColor: '#282828',
                     padding: '10px 20px',
