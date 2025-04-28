@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { List, Avatar, Row, Col, Input, Button } from 'antd';
+import { List, Avatar, Row, Col } from 'antd';
 import axios from 'axios';
 import DetailedVideoSidePane from './Sections/DetailedVideoSidePane';
 import SubscriberPane from './Sections/SubscriberPane';
@@ -10,7 +10,6 @@ function DetailedVideoPage(props) {
     const videoId = props.match.params.videoId;
     const [video, setVideo] = useState([]);
     const [commentLists, setCommentLists] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         const videoVariable = { videoId: props.match.params.videoId };
@@ -39,57 +38,9 @@ function DetailedVideoPage(props) {
         }
     };
 
-    
-    const handleSearch = () => {
-        props.history.push(`/?search=${encodeURIComponent(searchTerm)}`);
-        window.location.reload();
-        
-    };
-    
-
     if (video.writer) {
         return (
             <div style={{ backgroundColor: '#181818', minHeight: '100vh', color: 'white' }}>
-                <div style={{
-                    backgroundColor: '#282828',
-                    padding: '10px 20px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 1000
-                }}>
-                    <div style={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
-                        <Input
-                            placeholder="Buscar"
-                            size="large"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{
-                                width: 400,
-                                backgroundColor: '#1E1E1E',
-                                borderRadius: '2px 0 0 2px',
-                                color: 'white',
-                                border: '1px solid #444',
-                                borderRight: 'none'
-                            }}
-                        />
-                        <Button
-                            type="primary"
-                            size="large"
-                            onClick={handleSearch}
-                            style={{
-                                borderRadius: '0 2px 2px 0',
-                                backgroundColor: '#282828',
-                                border: '1px solid #444',
-                                borderLeft: 'none'
-                            }}
-                        >
-                            Buscar
-                        </Button>
-                    </div>
-                </div>
-
                 <Row>
                     <Col lg={18} xs={24}>
                         <div className="postPage" style={{ width: '100%', padding: '20px 40px' }}>
@@ -99,9 +50,10 @@ function DetailedVideoPage(props) {
                                     width: '100%', 
                                     maxHeight: 'calc(100vh - 200px)', 
                                     objectFit: 'contain', 
-                                    borderRadius: '15px', 
+                                    borderRadius: '20px', 
                                     display: 'block',
-                                    margin: '0 auto'
+                                    margin: '0 auto',
+                                    border: '5px solid black' 
                                 }} 
                                 src={`http://localhost:5000/${video.filePath}`} 
                                 controls 

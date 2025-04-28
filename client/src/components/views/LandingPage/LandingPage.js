@@ -79,7 +79,7 @@ function LandingPage() {
                 <br />
                 <Meta 
                     avatar={<Avatar src={video.writer.image} />}
-                    title={<h4 style={{ color: 'white' }}>{video.title}</h4>}
+                    title={<h4 style={{ color: 'white', fontSize: '0.8rem' }}>{video.title}</h4>}
                     style={{ color: 'rgb(255,255,255)' }}
                 />
                 <span style={{ color: 'white' }}>{video.writer.name}</span>
