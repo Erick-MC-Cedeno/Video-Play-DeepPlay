@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Button, Form, Input, notification } from 'antd';
+import { Typography, Button, Form, Input, notification, Spin } from 'antd';  // Import Spin from Ant Design
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -29,6 +29,7 @@ function UploadVideoPage(props) {
     const [filePath, setFilePath] = useState("");
     const [thumbnail, setThumbnail] = useState("");
     const [duration, setDuration] = useState("");
+    const [loading, setLoading] = useState(false);  
 
     const handleChangeTitle = event => setTitle(event.currentTarget.value);
     const handleChangeDescription = event => setDescription(event.currentTarget.value);
@@ -52,7 +53,10 @@ function UploadVideoPage(props) {
             duration: duration['fileDuration']
         };
 
+        setLoading(true);  
+
         axios.post('/api/video/uploadVideo', variables).then(response => {
+            setLoading(false);  
             if (response.data.success) {
                 notification.success({
                     message: <span style={{ color: '#258dfc', fontWeight: 'bold' }}>Video uploaded successfully!</span>,
@@ -66,6 +70,8 @@ function UploadVideoPage(props) {
     };
 
     const onDrop = files => {
+        setLoading(true);  
+
         let formData = new FormData();
         const config = { header: { 'content-type': 'multipart/form-data' } };
 
@@ -74,6 +80,7 @@ function UploadVideoPage(props) {
             if (response.data.success) {
                 setFilePath(response.data.filePath);
                 axios.post('/api/video/thumbnail', { filePath: response.data.filePath }).then(response => {
+                    setLoading(false);  
                     if (response.data.success) {
                         const fixedDuration = response.data.fileDuration.toString().trim().replace(/\s*:\s*/g, ':');
                         setDuration({ fileDuration: fixedDuration });
@@ -84,6 +91,7 @@ function UploadVideoPage(props) {
                 });
             } else {
                 alert("Video failed to save on the server");
+                setLoading(false);  
             }
         });
     };
@@ -93,6 +101,8 @@ function UploadVideoPage(props) {
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                 <Title level={2} style={{ color: '#258dfc' }}>Upload Video</Title>
             </div>
+
+            {loading && <div style={{ textAlign: 'center', marginBottom: '2rem' }}><Spin size="large" /></div>}
 
             <Form onSubmit={onSubmit}>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
